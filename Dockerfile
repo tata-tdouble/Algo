@@ -2,7 +2,7 @@
 FROM openjdk:17-slim
 
 # Copy your JAR file to the image
-COPY Algo.main.jar /app.jar
+COPY /out/artifacts/Algo_main_jarAlgo.main.jar /app.jar
 
 # Set the working directory
 WORKDIR /app
