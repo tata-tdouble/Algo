@@ -1,0 +1,22 @@
+runtime: java
+env: flex
+
+env_variables:
+# Add any environment variables here
+
+manual_scaling:
+  instances: 1
+
+readiness_check:
+  path: "/readiness_check"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+liveness_check:
+  path: "/liveness_check"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2

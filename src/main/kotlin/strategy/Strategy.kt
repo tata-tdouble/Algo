@@ -1,7 +1,6 @@
 package org.example.strategy
 
 import org.example.market.MarketState
-import org.example.util.AlgoLogger
 import org.koin.java.KoinJavaComponent.inject
 
 class Strategy {

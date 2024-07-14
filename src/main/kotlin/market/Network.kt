@@ -23,16 +23,12 @@ import org.example.constants.AppConstants.ema_80_0_data
 import org.example.constants.AppConstants.valueFastD_rsi
 import org.example.constants.AppConstants.valueFastK_rsi
 import org.example.user.UserState
-import org.example.util.AlgoLogger
-import org.example.util.FileResource
 import org.koin.java.KoinJavaComponent.inject
 
 class Network {
 
     private val marketState by inject<MarketState>(MarketState::class.java)
     private val userState by inject<UserState>(UserState::class.java)
-    private val logger by inject<AlgoLogger>(AlgoLogger::class.java)
-    private val res by inject<FileResource>(FileResource::class.java)
 
     suspend fun loadEMAData() = coroutineScope {
         val client = HttpClient(CIO) {

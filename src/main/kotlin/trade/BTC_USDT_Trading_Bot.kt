@@ -3,19 +3,16 @@ package org.example.trade
 import com.binance.connector.client.SpotClient
 import com.binance.connector.client.impl.SpotClientImpl
 import com.binance.connector.client.utils.signaturegenerator.HmacSignatureGenerator
-import kotlinx.coroutines.*
 import org.example.constants.AppConstants.APP_SETUP_API_BINANCE_SECRET
 import org.example.constants.AppConstants.APP_SETUP_BINANCE_API_KEY
 import org.example.strategy.StrategyState
 import org.example.user.UserState
-import org.example.util.AlgoLogger
 import org.koin.java.KoinJavaComponent.inject
 
 class BTC_USDT_Trading_Bot {
 
     private val strategyState by inject<StrategyState>(StrategyState::class.java)
     private val userState by inject<UserState>(UserState::class.java)
-    private val logger by inject<AlgoLogger>(AlgoLogger::class.java)
 
     var signGenerator: HmacSignatureGenerator = HmacSignatureGenerator(userState._options.value.get(APP_SETUP_API_BINANCE_SECRET))
 
@@ -31,7 +28,7 @@ class BTC_USDT_Trading_Bot {
         //bearish_action()
         //tradeState.updateState(false)
 
-        logger.log_info("bull" + mEntryState.toString())
+        println("bull" + mEntryState.toString())
         //}
     }
 
@@ -41,7 +38,7 @@ fun exit_listener_exec() {
         //bearish_action()
         //tradeState.updateState(false)
 
-        logger.log_info("bear" + mExitState.toString())
+        println("bear" + mExitState.toString())
         //}
     }
 
@@ -52,7 +49,7 @@ fun exit_listener_exec() {
         //bearish_action()
         //tradeState.updateState(false)
 
-        logger.log_info("Position : ${mEntryState - mExitState}")
+        println("Position : ${mEntryState - mExitState}")
         //}
     }
 

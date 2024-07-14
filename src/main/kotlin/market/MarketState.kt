@@ -2,17 +2,18 @@ package org.example.market
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.example.util.generateDoubleList
 
 class MarketState {
 
     // StateFlow holds default]
-    private val ema_1 = MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
-    private val ema_5 = MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
-    private val ema_23 = MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
-    private val ema_80 = MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
-    private val ema_200 = MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
-    private val vk_rsi =MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
-    private val vd_rsi =MutableStateFlow(ArrayDeque(listOf(0.0, 0.0, 0.0)))
+    private val ema_1 = MutableStateFlow(ArrayDeque(generateDoubleList(500, (40.00..75.00))))
+    private val ema_5 = MutableStateFlow(ArrayDeque(generateDoubleList(35, (40.00..75.00))))
+    private val ema_23 = MutableStateFlow(ArrayDeque(generateDoubleList(100, (40.00..75.00))))
+    private val ema_80 = MutableStateFlow(ArrayDeque(generateDoubleList(200, (40.00..75.00))))
+    private val ema_200 = MutableStateFlow(ArrayDeque(generateDoubleList(500, (40.00..75.00))))
+    private val vk_rsi =MutableStateFlow(ArrayDeque(generateDoubleList(3, (0.00..100.00))))
+    private val vd_rsi =MutableStateFlow(ArrayDeque(generateDoubleList(2, (0.00..100.00))))
 
     // Public read-only access
     val _ema_1: StateFlow<ArrayDeque<Double>> = ema_1
@@ -22,6 +23,7 @@ class MarketState {
     val _ema_200: StateFlow<ArrayDeque<Double>> = ema_200
     val _vk_rsi: StateFlow<ArrayDeque<Double>> = vk_rsi
     val _vd_rsi: StateFlow<ArrayDeque<Double>> = vd_rsi
+
 
     fun printMarketState(){
         println("*** MS ***")

@@ -3,10 +3,8 @@ package org.example.market
 
 import kotlinx.coroutines.time.delay
 import org.example.market.research.DataProcessor
-import org.example.market.research.Prediction
 import org.example.strategy.StrategyState
 import org.example.trade.BTC_USDT_Trading_Bot
-import org.example.util.AlgoLogger
 import org.koin.java.KoinJavaComponent.inject
 import java.time.Duration
 
@@ -55,7 +53,8 @@ class Controller {
             timeBefore = System.currentTimeMillis()
             val prediction = dataProcessor.predict()
             strategyState.update()
-            val signal = strategyState.generate_signal(prediction)
+            prediction.printPrediction()
+            //val signal = strategyState.generate_signal(prediction)
             //strategyState.printStrategyState()
             //binanceBot.entry_listener_exec()
             //binanceBot.exit_listener_exec()

@@ -1,7 +1,5 @@
 package org.example.constants
 
-import java.io.File
-
 object AppConstants {
 
     const val APP_SETUP_BINANCE_API_KEY = "Please enter your BINANCE API KEY :"

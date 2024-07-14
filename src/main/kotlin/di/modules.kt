@@ -12,8 +12,6 @@ import org.example.trade.BTC_USDT_Trading_Bot
 import org.example.trade.TradeState
 import org.example.user.UserOptions
 import org.example.user.UserState
-import org.example.util.AlgoLogger
-import org.example.util.FileResource
 import org.koin.dsl.module
 
 val applicationModules = module{
@@ -22,8 +20,6 @@ val applicationModules = module{
     single { AuthManager() }
     single { Controller() }
     single { Network() }
-    single { AlgoLogger() }
-    single { FileResource() }
     single { MarketState() }
     single { StrategyState() }
     single { Functions() }

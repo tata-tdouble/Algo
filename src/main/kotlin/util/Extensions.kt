@@ -1,8 +1,10 @@
 package org.example.util
 
+import kotlin.random.Random
+
 fun List<Double>.calculateMode(): Double? {
     if (this.isEmpty()) {
-        return null // No mode for an empty list
+        return 0.0 // No mode for an empty list
     }
 
     val groupedByValue = this.groupingBy { it }.eachCount() // Group by value and count occurrences
@@ -12,7 +14,7 @@ fun List<Double>.calculateMode(): Double? {
 
 fun List<Int>.calculateMode(): Int? {
     if (this.isEmpty()) {
-        return null // No mode for an empty list
+        return 0 // No mode for an empty list
     }
 
     val groupedByValue = this.groupingBy { it }.eachCount() // Group by value and count occurrences
@@ -23,7 +25,7 @@ fun List<Int>.calculateMode(): Int? {
 
 fun List<Double>.calculateSecondMode(): Double? {
     if (this.isEmpty()) {
-        return null // No mode for an empty list
+        return 0.0 // No mode for an empty list
     }
 
     val groupedByValue = this.groupingBy { it }.eachCount().toList().sortedByDescending { it.second } // Group, count, sort descending
@@ -40,10 +42,16 @@ fun List<Double>.calculateSecondMode(): Double? {
     }
 }
 
+fun generateDoubleList(size: Int, range: ClosedFloatingPointRange<Double>): List<Double> {
+    return List(size) {
+        Random.nextDouble(range.start, range.endInclusive)
+    }
+}
+
 
 fun List<Int>.calculateSecondMode(): Int? {
     if (this.isEmpty()) {
-        return null // No mode for an empty list
+        return 0 // No mode for an empty list
     }
 
     val groupedByValue = this.groupingBy { it }.eachCount().toList().sortedByDescending { it.second } // Group, count, sort descending

@@ -1,15 +1,9 @@
 package org.example.strategy
 
-import jdk.jfr.Percentage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import org.example.market.MarketState
 import org.example.market.research.Prediction
 import org.example.trade.TradeState
-import org.example.util.AlgoLogger
 import org.koin.java.KoinJavaComponent.inject
 import kotlin.math.roundToInt
 
@@ -155,17 +149,17 @@ class StrategyState {
     }
 
     fun check_for_bullish_market_ema5(prediction: Prediction): Boolean {
-        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bullish_time_ema5.roundToInt()).toList())
-        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema5_1!!).toList())
-        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema5_2!!).toList())
-        return ema5_market_time_1!! > 1.0 || ema5_market_time_2!! > 1.0 || ema5_market_time_3!! > 1.0
+        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bullish_time_ema5.roundToInt()).toList()) ?: 0.0
+        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema5_1!!).toList()) ?: 0.0
+        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema5_2!!).toList()) ?: 0.0
+        return ema5_market_time_1 > 1.0 || ema5_market_time_2 > 1.0 || ema5_market_time_3 > 1.0
     }
 
     fun check_for_bearish_market_ema5(prediction: Prediction): Boolean {
-        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bearish_time_ema5.roundToInt()).toList())
-        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema5_1!!).toList())
-        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema5_2!!).toList())
-        return ema5_market_time_1!! < -1.0 || ema5_market_time_2!! < -1.0 || ema5_market_time_3!! < -1.0
+        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bearish_time_ema5.roundToInt()).toList()) ?: 0.0
+        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema5_1!!).toList()) ?: 0.0
+        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema5_2!!).toList()) ?: 0.0
+        return ema5_market_time_1 < -1.0 || ema5_market_time_2 < -1.0 || ema5_market_time_3 < -1.0
     }
 
     fun check_for_bullish_market_ema23(prediction: Prediction): Boolean {
