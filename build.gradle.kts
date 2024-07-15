@@ -50,6 +50,27 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
+    // kotlin dl
+
+    implementation("org.deeplearning4j:deeplearning4j-core:1.0.0-beta6")
+    implementation("org.nd4j:nd4j-native:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-datasets:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-model-convert:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-optimization:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-features:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-parallel:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-plot:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-remote:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-utilities:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta6")
+    implementation("org.deeplearning4j:deeplearning4j-ui:1.0.0-beta6")
+    implementation("org.apache.commons:commons-math3:3.6.1")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.commons:commons-collections4:4.4")
+    implementation("org.apache.commons:commons-io:1.4")
+    implementation("org.apache.commons:commons-text:1.9")
+
+
 
     testImplementation(kotlin("test"))
 }
@@ -82,6 +103,7 @@ tasks.jar {
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
     jvmToolchain(8)
 }

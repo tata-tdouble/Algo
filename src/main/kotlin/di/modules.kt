@@ -1,9 +1,11 @@
 package org.example.di
 
+import Predictor
 import org.example.auth.AuthManager
 import org.example.market.Controller
 import org.example.market.MarketState
 import org.example.market.Network
+import org.example.market.ai.Trainer
 import org.example.market.research.DataProcessor
 import org.example.strategy.Functions
 import org.example.strategy.Strategy
@@ -27,4 +29,5 @@ val applicationModules = module{
     single { TradeState() }
     single { BTC_USDT_Trading_Bot() }
     single { DataProcessor() }
+    single { Trainer() }
 }

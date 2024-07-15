@@ -2,7 +2,9 @@ package org.example.market
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.example.market.research.EpochLevel
 import org.example.util.generateDoubleList
+import kotlin.properties.Delegates
 
 class MarketState {
 
@@ -24,6 +26,10 @@ class MarketState {
     val _vk_rsi: StateFlow<ArrayDeque<Double>> = vk_rsi
     val _vd_rsi: StateFlow<ArrayDeque<Double>> = vd_rsi
 
+    var emaState : MutableList<EmaState> = mutableListOf()
+
+    var previousPositiveLevels : MutableList<EpochLevel> = mutableListOf()
+    var previousNegativeLevels : MutableList<EpochLevel> = mutableListOf()
 
     fun printMarketState(){
         println("*** MS ***")
@@ -70,6 +76,32 @@ class MarketState {
     fun updateVDRSI(double: Double) {
         this.vd_rsi.value.addFirst(double)
         if (this.vd_rsi.value.size > 3) this.vd_rsi.value.removeLast()
+    }
+
+    fun calc_ema_state() {
+        val state = EmaState()
+        state.ema5 = _ema_1.value.first() > _ema_5.value.first()
+        state.ema23 = _ema_1.value.first() > _ema_23.value.first()
+        state.ema80 = _ema_1.value.first() > _ema_80.value.first()
+        state.ema200 = _ema_1.value.first() > _ema_200.value.first()
+        emaState.add(0, state)
+        if(emaState.size > 2) emaState.removeLast()
+    }
+
+    class EmaState{
+        var ema5 by Delegates.notNull<Boolean>()
+        var ema23 by Delegates.notNull<Boolean>()
+        var ema80 by Delegates.notNull<Boolean>()
+        var ema200 by Delegates.notNull<Boolean>()
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is EmaState) return false
+            return ema5 == other.ema5 &&
+                    ema23 == other.ema23 &&
+                    ema80 == other.ema80 &&
+                    ema200 == other.ema200
+        }
     }
 
 }

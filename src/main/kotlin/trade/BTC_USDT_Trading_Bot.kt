@@ -32,7 +32,7 @@ class BTC_USDT_Trading_Bot {
         //}
     }
 
-fun exit_listener_exec() {
+    fun exit_listener_exec() {
         val mExitState = strategyState.exitState.value
         //if (tradeState._inTheMarket.value && it > 6) {
         //bearish_action()

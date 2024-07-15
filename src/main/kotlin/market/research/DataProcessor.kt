@@ -9,8 +9,8 @@ class DataProcessor {
 
     val epochMap : MutableMap<EpochLevel, List<Epoch>> = mutableMapOf()
 
-    fun predict(): Prediction {
-        return Prediction(genEpochData())
+    fun getNrmalizer(): Normalizer {
+        return Normalizer(genEpochData())
     }
 
 
@@ -45,7 +45,9 @@ class DataProcessor {
                 if (i > startIndex) {
                     val subList = trimmedEma1m.subList(startIndex, i)
                     val sign = prevDiff > 0 // sign is true if above, false if below
-                    result.add(Epoch(subList, sign))
+                    val epoch = Epoch(subList, sign)
+                    epoch.data()
+                    result.add(epoch)
                 }
                 startIndex = i
                 crossingFound = true

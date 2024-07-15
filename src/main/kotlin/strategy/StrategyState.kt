@@ -2,7 +2,7 @@ package org.example.strategy
 
 
 import kotlinx.coroutines.flow.*
-import org.example.market.research.Prediction
+import org.example.market.research.Normalizer
 import org.example.trade.TradeState
 import org.koin.java.KoinJavaComponent.inject
 import kotlin.math.roundToInt
@@ -113,94 +113,94 @@ class StrategyState {
         _position.value.add(0, (e1+e2+e3+e4+e5+e6+e7+e8) - (f1+f2+f3+f4+f5+f6+f7) )
     }
 
-    fun generate_signal(prediction: Prediction): Signal {
+    fun generate_signal(normalizer: Normalizer): Signal {
         return if (tradeState._inTheMarket.value)
-            search_for_bearish_signal(prediction)
+            search_for_bearish_signal(normalizer)
         else
-            search_for_bullish_signal(prediction)
+            search_for_bullish_signal(normalizer)
     }
 
-    fun search_for_bullish_signal(prediction: Prediction): Signal {
-        val market_1 = check_for_bearish_market_ema5(prediction)
-        val market_2 = check_for_bearish_market_ema23(prediction)
-        val market_3 = check_for_bearish_market_ema80(prediction)
-        val market_4 = check_for_bearish_market_ema200(prediction)
+    fun search_for_bullish_signal(normalizer: Normalizer): Signal {
+        val market_1 = check_for_bearish_market_ema5(normalizer)
+        val market_2 = check_for_bearish_market_ema23(normalizer)
+        val market_3 = check_for_bearish_market_ema80(normalizer)
+        val market_4 = check_for_bearish_market_ema200(normalizer)
 
         if (!market_1) return Signal(0, 0.0)
         if (!market_2) return Signal(0, 0.0)
         if (!market_3) return Signal(0, 0.0)
         if (!market_4) return Signal(0, 0.0)
 
-        return Signal(1, prediction.median_bearish_price_percentage_ema80_1!!)
+        return Signal(1, normalizer.median_bearish_price_percentage_ema80_1!!)
     }
 
-    fun search_for_bearish_signal(prediction: Prediction): Signal {
-        val market_1 = check_for_bullish_market_ema5(prediction)
-        val market_2 = check_for_bullish_market_ema23(prediction)
-        val market_3 = check_for_bullish_market_ema80(prediction)
-        val market_4 = check_for_bullish_market_ema200(prediction)
+    fun search_for_bearish_signal(normalizer: Normalizer): Signal {
+        val market_1 = check_for_bullish_market_ema5(normalizer)
+        val market_2 = check_for_bullish_market_ema23(normalizer)
+        val market_3 = check_for_bullish_market_ema80(normalizer)
+        val market_4 = check_for_bullish_market_ema200(normalizer)
 
         if (!market_1) return Signal(0, 0.0)
         if (!market_2) return Signal(0, 0.0)
         if (!market_3) return Signal(0, 0.0)
         if (!market_4) return Signal(0, 0.0)
 
-        return Signal(-1, prediction.median_bullish_price_percentage_ema80_1!!)
+        return Signal(-1, normalizer.median_bullish_price_percentage_ema80_1!!)
     }
 
-    fun check_for_bullish_market_ema5(prediction: Prediction): Boolean {
-        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bullish_time_ema5.roundToInt()).toList()) ?: 0.0
-        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema5_1!!).toList()) ?: 0.0
-        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema5_2!!).toList()) ?: 0.0
+    fun check_for_bullish_market_ema5(normalizer: Normalizer): Boolean {
+        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bullish_time_ema5.roundToInt()).toList()) ?: 0.0
+        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema5_1!!).toList()) ?: 0.0
+        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema5_2!!).toList()) ?: 0.0
         return ema5_market_time_1 > 1.0 || ema5_market_time_2 > 1.0 || ema5_market_time_3 > 1.0
     }
 
-    fun check_for_bearish_market_ema5(prediction: Prediction): Boolean {
-        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bearish_time_ema5.roundToInt()).toList()) ?: 0.0
-        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema5_1!!).toList()) ?: 0.0
-        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema5_2!!).toList()) ?: 0.0
+    fun check_for_bearish_market_ema5(normalizer: Normalizer): Boolean {
+        val ema5_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bearish_time_ema5.roundToInt()).toList()) ?: 0.0
+        val ema5_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema5_1!!).toList()) ?: 0.0
+        val ema5_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema5_2!!).toList()) ?: 0.0
         return ema5_market_time_1 < -1.0 || ema5_market_time_2 < -1.0 || ema5_market_time_3 < -1.0
     }
 
-    fun check_for_bullish_market_ema23(prediction: Prediction): Boolean {
-        val ema23_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bullish_time_ema23.roundToInt()).toList())
-        val ema23_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema23_1!!).toList())
-        val ema23_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema23_2!!).toList())
+    fun check_for_bullish_market_ema23(normalizer: Normalizer): Boolean {
+        val ema23_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bullish_time_ema23.roundToInt()).toList())
+        val ema23_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema23_1!!).toList())
+        val ema23_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema23_2!!).toList())
         return ema23_market_time_1!! > 0.5 || ema23_market_time_2!! > 0.5 || ema23_market_time_3!! > 0.5
     }
 
-    fun check_for_bearish_market_ema23(prediction: Prediction): Boolean {
-        val ema23_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bearish_time_ema23.roundToInt()).toList())
-        val ema23_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema23_1!!).toList())
-        val ema23_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema23_2!!).toList())
+    fun check_for_bearish_market_ema23(normalizer: Normalizer): Boolean {
+        val ema23_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bearish_time_ema23.roundToInt()).toList())
+        val ema23_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema23_1!!).toList())
+        val ema23_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema23_2!!).toList())
         return ema23_market_time_1!! < -0.5 || ema23_market_time_2!! < -0.5 || ema23_market_time_3!! < -0.5
     }
 
-    fun check_for_bullish_market_ema80(prediction: Prediction): Boolean {
-        val ema80_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bullish_time_ema80.roundToInt()).toList())
-        val ema80_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema80_1!!).toList())
-        val ema80_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema80_2!!).toList())
+    fun check_for_bullish_market_ema80(normalizer: Normalizer): Boolean {
+        val ema80_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bullish_time_ema80.roundToInt()).toList())
+        val ema80_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema80_1!!).toList())
+        val ema80_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema80_2!!).toList())
         return ema80_market_time_1!! > 0.0 || ema80_market_time_2!! > 0.0 || ema80_market_time_3!! > 0.0
     }
 
-    fun check_for_bearish_market_ema80(prediction: Prediction): Boolean {
-        val ema80_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bearish_time_ema80.roundToInt()).toList())
-        val ema80_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema80_1!!).toList())
-        val ema80_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema80_2!!).toList())
+    fun check_for_bearish_market_ema80(normalizer: Normalizer): Boolean {
+        val ema80_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bearish_time_ema80.roundToInt()).toList())
+        val ema80_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema80_1!!).toList())
+        val ema80_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema80_2!!).toList())
         return ema80_market_time_1!! < 0 || ema80_market_time_2!! < 0 || ema80_market_time_3!! < 0
     }
 
-    fun check_for_bullish_market_ema200(prediction: Prediction): Boolean {
-        val ema200_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bullish_time_ema200.roundToInt()).toList())
-        val ema200_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema200_1!!).toList())
-        val ema200_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bullish_time_ema200_2!!).toList())
+    fun check_for_bullish_market_ema200(normalizer: Normalizer): Boolean {
+        val ema200_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bullish_time_ema200.roundToInt()).toList())
+        val ema200_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema200_1!!).toList())
+        val ema200_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bullish_time_ema200_2!!).toList())
         return ema200_market_time_1!! > 0.0 || ema200_market_time_2!! > 0.0 || ema200_market_time_3!! > 0.0
     }
 
-    fun check_for_bearish_market_ema200(prediction: Prediction): Boolean {
-        val ema200_market_time_1 = calculateGradient(_position.value.subList(0, prediction.average_bearish_time_ema200.roundToInt()).toList())
-        val ema200_market_time_2 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema200_1!!).toList())
-        val ema200_market_time_3 = calculateGradient(_position.value.subList(0, prediction.median_bearish_time_ema200_2!!).toList())
+    fun check_for_bearish_market_ema200(normalizer: Normalizer): Boolean {
+        val ema200_market_time_1 = calculateGradient(_position.value.subList(0, normalizer.average_bearish_time_ema200.roundToInt()).toList())
+        val ema200_market_time_2 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema200_1!!).toList())
+        val ema200_market_time_3 = calculateGradient(_position.value.subList(0, normalizer.median_bearish_time_ema200_2!!).toList())
         return ema200_market_time_1!! < 0 || ema200_market_time_2!! < 0 || ema200_market_time_3!! < 0
     }
 

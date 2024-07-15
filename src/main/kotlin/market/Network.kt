@@ -119,6 +119,7 @@ class Network {
                 ema_200_0_data -> marketState.updateEMA200(value)
             }
         }
+        marketState.calc_ema_state()
     }
 
     private fun extractRSIValues(map: Map<String, Double>) {

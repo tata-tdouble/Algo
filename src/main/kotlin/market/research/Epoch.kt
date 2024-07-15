@@ -15,25 +15,38 @@ data class Epoch(
     val good_market_time: Int = if (sign) {
         data.indexOf(high)
     } else {
-        data.indexOf(high) - data.indexOf(low)
+        data.lastIndex - data.indexOf(low)
     }
 
     val bad_market_time: Int = if (sign) {
-        data.indexOf(low) - data.indexOf(high)
+        data.lastIndex - data.indexOf(high)
     } else {
         data.indexOf(low)
     }
 
     val inc_floctuation_percent: Double = if (sign) {
-        ( (data.first() - high) / data.first() ) * 100
+        ( (high - data.first()) / data.first() ) * 100
     } else {
-        ( ( high - low) / low ) * 100
+        ( ( data.last() - high) / low ) * 100
     }
 
     val dec_floctuation_percent: Double = if (sign) {
-        ( (low - high) / low ) * 100
+        ( (low) / data.first()  ) * 100
     } else {
-        ( ( low - data.first() ) / low ) * 100
+        ( ( data.last() - low ) / low ) * 100
+    }
+
+    val epochTime = data.size
+
+    fun data(){
+        println("high $high")
+        println("low $low")
+        println("entry_price $entry_price")
+        println("exit_price $exit_price")
+        println("good_market_time $good_market_time")
+        println("bad_market_time $exit_price")
+        println("inc_floctuation_percent $inc_floctuation_percent")
+        println("dec_floctuation_percent $dec_floctuation_percent")
     }
 
 }

@@ -2,7 +2,7 @@ package org.example.market
 
 
 import kotlinx.coroutines.time.delay
-import org.example.market.research.DataProcessor
+import org.example.market.ai.Trainer
 import org.example.strategy.StrategyState
 import org.example.trade.BTC_USDT_Trading_Bot
 import org.koin.java.KoinJavaComponent.inject
@@ -14,7 +14,7 @@ class Controller {
     private val network by inject<Network>(Network::class.java)
     private val strategyState by inject<StrategyState>(StrategyState::class.java)
     private val binanceBot by inject<BTC_USDT_Trading_Bot>(BTC_USDT_Trading_Bot::class.java)
-    private val dataProcessor by inject<DataProcessor>(DataProcessor::class.java)
+    private val trainer by inject<Trainer>(Trainer::class.java)
 
 
     suspend fun takeControl() {
@@ -47,13 +47,14 @@ class Controller {
             network.loadRsiData()
             timeAfter = System.currentTimeMillis()
             timeDiff = timeAfter - timeBefore
-//            logger.log_warn("RSI Data Load Time: $timeDiff ms")
+            // logger.log_warn("RSI Data Load Time: $timeDiff ms")
 
             // Update strategy state and execute bot
             timeBefore = System.currentTimeMillis()
-            val prediction = dataProcessor.predict()
             strategyState.update()
-            prediction.printPrediction()
+            trainer.counter()
+
+            //prediction.printPrediction()
             //val signal = strategyState.generate_signal(prediction)
             //strategyState.printStrategyState()
             //binanceBot.entry_listener_exec()
