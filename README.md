@@ -2,7 +2,7 @@
 
 This is crypto currency price prediction bot created to use live binance market data.
 
-It uses Binance  Restful API to fetch merket prices and LSTM model of the Deeplearning4j library to train and make predictions.
+It uses Binance  Restful API to fetch market prices and an LSTM model of the Deeplearning4j library to train and make predictions.
 
 # Instructions
 
